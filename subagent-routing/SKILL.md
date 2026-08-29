@@ -1,11 +1,11 @@
 ---
 name: subagent-routing
-description: Use immediately before any Codex subagent is spawned or otherwise used, including delegation, parallel agent work, exploration, planning, review, coordination, follow-up messages, or waits. Route every subagent through one of three plain default model and reasoning configurations with isolated manually curated context.
+description: Use once per turn, before the first Codex subagent action, when the turn will involve delegation, parallel agent work, exploration, planning, review, coordination, follow-up messages, or waits. Route every subagent through one of three plain default model and reasoning configurations with isolated manually curated context.
 ---
 
 # Subagent Routing
 
-Apply this skill before the first subagent action and throughout subagent orchestration. This skill selects a model and reasoning effort; it does not authorize delegation. Spawn subagents only when the user or an applicable project or skill instruction authorizes or requires them.
+Load this skill once per turn, before the first subagent action, and apply its instructions throughout all subagent orchestration in that turn. Do not reload it before each spawn, follow-up, message, interrupt, status check, or wait. This skill selects a model and reasoning effort; it does not authorize delegation. Spawn subagents only when the user or an applicable project or skill instruction authorizes or requires them.
 
 ## Required invariants
 
