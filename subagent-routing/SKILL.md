@@ -17,17 +17,21 @@ Apply throughout the turn. This skill selects routes; it does not authorize dele
 
 ## Routes
 
-Choose by the judgment required, not output size or the parent model.
+Prefer defining tasks well enough that most dispatched work can run on Luna/max. Before routing a broad task, separate the analysis, planning, review, and decisions from execution. Use Astra/xhigh to settle those questions and specify bounded Luna/max tasks with clear inputs, expected behavior, constraints, and acceptance checks. Do not send an entire mixed task to Astra merely because one part needs judgment; isolate that part and return the resulting execution work to Luna/max. Keep task boundaries useful rather than fragmenting work just to increase Luna usage.
+
+Choose each resulting task's route by the judgment still required, not output size or the parent model. This preference does not override the Astra/xhigh responsibilities below; Astra/medium remains the fallback for work outside the other two routes.
 
 | Model | Effort | Use for |
 | --- | --- | --- |
-| `gpt-6-astra` | `xhigh` | Ambiguity, architecture, difficult diagnosis, consequential tradeoffs, conflicting evidence, high-consequence review, long-horizon reasoning, or creating and substantially revising plans. |
-| `gpt-6-astra` | `low` | Short-horizon coordination or integration with settled plans, interfaces, design decisions, and acceptance criteria. |
-| `gpt-5.6-luna` | `max` | Unambiguous searches, extraction, inventories, summaries, or a self-contained implementation slice from an approved plan. |
+| `gpt-6-astra` | `xhigh` | All analysis, review, planning, decision making, architecture, diagnosis, and resolution of ambiguity or conflicting evidence. |
+| `gpt-5.6-luna` | `max` | Well-defined implementations, noisy tasks, and tedious tasks, including reverse engineering, mechanical searches, extraction, inventories, and factual summaries. |
+| `gpt-6-astra` | `medium` | Everything else, including coordination or integration of settled work that does not require analysis, review, planning, or new decisions. |
 
-Use Luna/max for a fully specified execution task; use Astra/low to coordinate settled work. Neither route should invent a plan or resolve consequential ambiguity. Route those decisions to Astra/xhigh. Large mechanical tasks do not need Astra solely because of their size.
+Except for the reverse-engineering carve-out below, apply the Astra/xhigh rule first: analysis, review, planning, and decision making go there even when brief, routine, noisy, or tedious. Use Luna/max for the remaining well-defined implementation or noisy and tedious execution work. Use Astra/medium for everything else. Large mechanical tasks do not need Astra solely because of their size.
 
-If Luna or Astra/low encounters conflicting requirements or missing decisions, have it report the ambiguity and evidence for Astra/xhigh to resolve. Luna's `max` effort means thorough coverage, not permission to guess requirements.
+Treat reverse engineering as tedious work for Luna/max. Break it into bounded questions or components that Luna can investigate, such as tracing a call path, mapping an interface or data format, or reconstructing a specific behavior. Include the relevant inputs, scope, and required evidence in each handoff. Luna may perform the local reasoning needed to answer those questions; do not escalate merely because reverse engineering involves analysis. Route decomposition planning, broader synthesis or review, and unresolved product or architectural decisions to Astra/xhigh.
+
+Outside that bounded reverse-engineering work, if Luna or Astra/medium encounters a need for analysis, review, planning, or a new decision, have it report the relevant evidence for Astra/xhigh to handle. Luna's `max` effort means thorough coverage, not permission to guess requirements.
 
 ## Message checklist
 
