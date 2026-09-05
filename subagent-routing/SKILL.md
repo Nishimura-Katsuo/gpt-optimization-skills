@@ -1,11 +1,11 @@
 ---
 name: subagent-routing
-description: Select Astra or Luna and reasoning effort for authorized Codex subagent work. Load once per turn before the first subagent action, including follow-ups, messages, status checks, or waits. Require default agents with manually curated context and no inherited turns.
+description: Select Astra or Luna and reasoning effort for authorized Codex subagent work. Load once per conversation before the first subagent action; reuse across turns. Re-read only if the skill changes or its contents are no longer available in context. Require default agents with manually curated context and no inherited turns.
 ---
 
 # Subagent Routing
 
-Apply throughout the turn. This skill selects routes; it does not authorize delegation or nested delegation. Follow the session's authorization rules.
+Apply throughout the conversation. Reuse loaded instructions across turns, including follow-ups, messages, status checks, and waits; these actions do not require another read. Re-read only if the skill changes or its contents are no longer available in context. This skill selects routes; it does not authorize delegation or nested delegation. Follow the session's authorization rules.
 
 ## Spawn rules
 
