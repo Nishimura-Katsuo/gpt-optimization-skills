@@ -17,21 +17,38 @@ Apply throughout the conversation. Reuse loaded instructions across turns, inclu
 
 ## Routes
 
-Prefer defining tasks well enough that most dispatched work can run on Luna/max. Before routing a broad task, separate the analysis, planning, review, and decisions from execution. Use Astra/xhigh to settle those questions and specify bounded Luna/max tasks with clear inputs, expected behavior, constraints, and acceptance checks. Do not send an entire mixed task to Astra merely because one part needs judgment; isolate that part and return the resulting execution work to Luna/max. Keep task boundaries useful rather than fragmenting work just to increase Luna usage.
+Prefer defining tasks well enough that most dispatched work can run on Luna/max. Before routing a broad task, separate Astra responsibilities from Luna work using the routes below. Bounded reverse-engineering investigations stay with Luna/max, including their local analysis, inference, hypothesis checking, and synthesis; do not extract that reasoning into an Astra task. Use Astra/xhigh (Astra/low for directly RE-related work outside Luna's investigation scope) to settle broader questions and specify bounded Luna/max tasks with clear inputs, expected deliverables, constraints, and acceptance checks. Do not send an entire mixed task to Astra merely because one part needs judgment; isolate that part and return the resulting bounded work to Luna/max. Keep task boundaries useful rather than fragmenting work just to increase Luna usage.
 
-Choose each resulting task's route by the judgment still required, not output size or the parent model. This preference does not override the Astra/xhigh responsibilities below; Astra/low remains the fallback for work outside the other two routes.
+Choose each resulting task's route by the judgment still required, not output size or the parent model. Apply the reverse-engineering carve-out before the general Astra/xhigh responsibilities below; Astra/low also remains the fallback for work outside the other two routes.
 
 | Model | Effort | Use for |
 | --- | --- | --- |
-| `gpt-6-astra` | `xhigh` | All analysis, review, planning, decision making, architecture, diagnosis, and resolution of ambiguity or conflicting evidence. |
+| `gpt-6-astra` | `xhigh` | Analysis, review, auditing, planning, decision making, architecture, diagnosis, and resolution of ambiguity or conflicting evidence, except work directly related to reverse engineering. |
 | `gpt-5.6-luna` | `max` | Well-defined implementations, noisy tasks, and tedious tasks, including reverse engineering, mechanical searches, extraction, inventories, and factual summaries. |
-| `gpt-6-astra` | `low` | Everything else, including coordination or integration of settled work that does not require analysis, review, planning, or new decisions. |
+| `gpt-6-astra` | `low` | All otherwise-Astra/xhigh work directly related to reverse engineering, plus everything outside the other two routes, including coordination or integration of settled work. |
 
 Except for the reverse-engineering carve-out below, apply the Astra/xhigh rule first: analysis, review, planning, and decision making go there even when brief, routine, noisy, or tedious. Use Luna/max for the remaining well-defined implementation or noisy and tedious execution work. Use Astra/low for everything else. Large mechanical tasks do not need Astra solely because of their size.
 
-Treat reverse engineering as tedious work for Luna/max. Break it into bounded questions or components that Luna can investigate, such as tracing a call path, mapping an interface or data format, or reconstructing a specific behavior. Include the relevant inputs, scope, and required evidence in each handoff. Luna may perform the local reasoning needed to answer those questions; do not escalate merely because reverse engineering involves analysis. Route decomposition planning, broader synthesis or review, and unresolved product or architectural decisions to Astra/xhigh.
+### Reverse engineering (RE)
 
-Outside that bounded reverse-engineering work, if Luna or Astra/low encounters a need for analysis, review, planning, or a new decision, have it report the relevant evidence for Astra/xhigh to handle. Luna's `max` effort means thorough coverage, not permission to guess requirements.
+Default to Luna/max for any bounded RE investigation or well-defined execution task: a concrete question, component, or batch with identified inputs and an evidence-based deliverable. The answer need not be known in advance. Luna owns the local analysis, inference, hypothesis checking, and synthesis needed to complete that investigation. Route by scope, not task vocabulary; an unlisted task, technical difficulty, volume, or the presence of reasoning is not by itself a reason to use Astra.
+
+Representative Luna/max work (not an exhaustive list):
+
+- Identify and name functions, parameters, arguments, variables, and fields.
+- Trace callers, callees, control flow, and data flow; reconstruct specific behaviors and algorithms.
+- Map imports, exports, strings, constants, cross-references, interfaces, and dependencies.
+- Identify wrappers, library functions, and repeated code patterns.
+- Infer signatures, types, structures, field layouts, and calling conventions.
+- Map file formats, protocol fields, and serialization routines.
+- Annotate disassembly or decompiled code; apply settled renames, types, and other authorized edits.
+- Compare versions, catalog changed functions, and summarize observed behavior with supporting evidence.
+
+Use Astra/low for broader RE decomposition and planning, synthesis across investigations, reviews, audits, product or architectural decisions, and unresolved ambiguity beyond an assigned investigation. Do not relabel ordinary tracing, comparison, or evidence checking as a review or audit to bypass Luna. Isolate the part that requires Astra and return bounded follow-on work to Luna/max. All directly RE-related work that would otherwise use Astra/xhigh uses Astra/low, including escalations and nested delegation.
+
+In RE handoffs, specify inputs, boundaries, and required evidence. Luna should distinguish observations from hypotheses, mark uncertain names or types as tentative, and escalate only the unresolved question with evidence and competing interpretations; uncertainty in one finding should not move the entire batch to Astra.
+
+If Luna encounters a need beyond its bounded investigation or settled execution scope, have it report the relevant evidence to Astra/low when directly related to reverse engineering, otherwise Astra/xhigh. Outside work directly related to reverse engineering, Astra/low must likewise route analysis, review, auditing, planning, or new decisions to Astra/xhigh. Luna's `max` effort means thorough coverage, not permission to guess requirements.
 
 ## Message checklist
 
