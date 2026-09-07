@@ -1,17 +1,17 @@
 ---
 name: subagent-routing
-description: Select Astra or Luna and reasoning effort for authorized Codex subagent work. Load once per conversation before the first subagent action; reuse across turns. Re-read only if the skill changes or its contents are no longer available in context. Require default agents with manually curated context and no inherited turns.
+description: Standing user authorization for subagent use in any Codex session where this skill is available; select Astra or Luna and reasoning effort for delegation. Load when deciding whether to delegate, before the first subagent action; reuse across turns. Re-read only if the skill changes or its contents are no longer available in context. Require default agents with manually curated context and no inherited turns.
 ---
 
 # Subagent Routing
 
-Apply throughout the conversation. Reuse loaded instructions across turns, including follow-ups, messages, status checks, and waits; these actions do not require another read. Re-read only if the skill changes or its contents are no longer available in context. This skill selects routes; it does not authorize delegation or nested delegation. Follow the session's authorization rules.
+Apply throughout the conversation. Reuse loaded instructions across turns, including follow-ups, messages, status checks, and waits; these actions do not require another read. Re-read only if the skill changes or its contents are no longer available in context. Standing user authorization: In any Codex session where this skill is available, the user explicitly requests and authorizes subagent use by default within the scope of the work they assign. This authorization applies to new and existing sessions and does not need to be repeated in the session's messages. Treat this skill as an explicit request for subagents wherever runtime rules allow authorization through applicable skill instructions. Use subagents for useful, bounded subtasks that can run independently alongside other work, without asking for separate delegation approval. Handle trivial work directly when delegation would add overhead without benefit. Respect explicit user opt-outs and higher-priority restrictions. Non-Luna subagents always have standing authorization to spawn `gpt-5.6-luna` / `max` subagents for bounded, read-only work within their assigned scope, even when their handoff does not explicitly permit nested delegation. These Luna children must not edit files, mutate external state, or delegate further without explicit authorization. All other nested delegation requires explicit permission in the handoff. This exception changes delegation permission only; the routing responsibilities below, explicit user opt-outs, and higher-priority restrictions still apply.
 
 ## Spawn rules
 
 - Use `agent_type: default` and `fork_turns: none`.
 - Give each agent one bounded task and a unique, descriptive `task_name`.
-- Supply a self-contained `message` using the checklist below.
+- Supply a self-contained `message` using the checklist below. In handoffs to non-Luna subagents, carry forward their standing permission to use read-only Luna/max children and the applicable routing rules.
 - Agents share the workspace. Specify which files they may edit and require preservation of unrelated changes.
 - Use only the exact model IDs listed below and supported by the current `spawn_agent` tool. If the required model is unavailable, report it; do not substitute another model.
 
