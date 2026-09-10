@@ -43,6 +43,16 @@ Use Astra/low for broader RE decomposition and planning, cross-investigation syn
 
 All directly RE-related work that would otherwise route to Astra/medium uses Astra/low, including escalations and nested delegation. Outside RE, Luna must escalate judgment beyond its assigned execution scope to Astra/medium; Astra/low must route analysis, review, audits, planning, and new decisions to Astra/medium. Luna's max effort means thorough coverage, not permission to guess requirements.
 
+## Patient supervision and check-ins
+
+Assume a subagent reported as running is still working. Long analysis, silent periods, missing interim files, token consumption, and repeated observation timeouts do not establish a stall or failure, even when they recur across coordinator turns. Never terminate, interrupt, replace, duplicate, or shrink an agent's assignment solely for these reasons, or mark the overall goal blocked because of them.
+
+If concerned, send a non-interrupting check-in asking what the agent is currently doing, what it has established, and whether it needs help with a concrete blocker. Allow time for the reply; the agent may be reasoning or awaiting a tool and cannot necessarily answer immediately. Check-ins should support the work, not demand immediate completion or a placeholder report as proof of activity. Avoid repeated nudges while an earlier check-in is pending.
+
+Use the available wait mechanism and authoritative task status, and continue useful independent work while waiting. A wait timeout means the observation window ended; it does not mean the task ended. Preserve the existing agent and its context through coordinator turns and compactions. Judge returned work by its evidence and acceptance criteria, not speed or frequency of updates.
+
+Interruption or cancellation requires a concrete reason independent of duration: an explicit user stop or scope change, an observed unauthorized or harmful action, or a confirmed failure requiring recovery. For reported blockers or suspected repetitive work, first ask the agent for its explanation and help resolve the specific issue. Do not infer failure from silence, and do not manufacture a failure by interrupting a running agent. Start replacement work only after resolving ownership and confirming that the original task has stopped.
+
 ## Dispatch and handoffs
 
 - Use `agent_type: default` and no inherited conversation history (`fork_turns: none`, or `fork_context: false` where supported).
