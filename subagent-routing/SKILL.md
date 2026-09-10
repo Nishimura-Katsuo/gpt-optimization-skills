@@ -1,6 +1,6 @@
 ---
 name: subagent-routing
-description: Proactively delegate substantive work to Astra and Luna with standing user authorization. Load before multi-step builds, investigations, reviews, or audits, and before choosing an approach when requirements are ambiguous, tradeoffs consequential, or findings conflicting—even for short requests without explicit delegation. Resolve material ambiguity rather than assume intent; honor user-delegated decisions. Skip straightforward questions and trivial, easily verified edits.
+description: Proactively delegate substantive work to Astra, Sol, and Luna with standing user authorization. Load before multi-step builds, investigations, reviews, or audits, and before choosing an approach when requirements are ambiguous, tradeoffs consequential, or findings conflicting—even for short requests without explicit delegation. Resolve material ambiguity rather than assume intent; honor user-delegated decisions. Skip straightforward questions and trivial, easily verified edits.
 ---
 
 # Subagent Routing
@@ -23,25 +23,25 @@ Non-Luna agents have standing permission to spawn Luna/max children for bounded,
 
 ## Routes
 
-Choose routes by the judgment required, not task size or the coordinator's model. Apply the RE exception below first, then Astra/medium for judgment, Luna/max for settled execution, and Astra/low for other work.
+Choose routes by the judgment required, not task size or the coordinator's model. Apply the RE exception below first, then Astra/medium for judgment, Luna/max for settled execution, and Sol/xhigh for other work.
 
 | Model | Effort | Use for |
 | --- | --- | --- |
 | `gpt-6-astra` | `medium` | Analysis, review, audits, planning, decisions, architecture, diagnosis, and resolving ambiguity or conflicting evidence outside reverse engineering. Applies even when the judgment task is brief, routine, noisy, or tedious. |
 | `gpt-5.6-luna` | `max` | Well-defined implementation; mechanical, noisy, or tedious execution; extraction, inventories, factual summaries; and bounded reverse-engineering investigations, including their local reasoning. |
-| `gpt-6-astra` | `low` | Otherwise-Astra/medium work directly related to reverse engineering, plus remaining work, including coordination and integration of settled work. |
+| `gpt-5.6-sol` | `xhigh` | Otherwise-Astra/medium work directly related to reverse engineering, including escalations and nested delegation, plus remaining work, including coordination and integration of settled work. |
 
-Define tasks so most dispatched work can run on Luna/max. For mixed work, use Astra to settle the broader questions and define bounded Luna tasks with clear inputs, outputs, constraints, and acceptance checks. Do not send the whole task to Astra because one part needs judgment, or fragment it merely to increase Luna usage. Large mechanical tasks do not require Astra because of their size.
+Define tasks so most dispatched work can run on Luna/max. For mixed work, use Astra/medium (Sol/xhigh for RE) to settle the broader questions and define bounded Luna tasks with clear inputs, outputs, constraints, and acceptance checks. Do not send the whole task to Astra or Sol because one part needs judgment, or fragment it merely to increase Luna usage. Large mechanical tasks do not require Astra or Sol because of their size.
 
 ### Reverse engineering (RE)
 
-Luna/max owns a bounded RE investigation: a concrete question, component, or batch with identified inputs and an evidence-based deliverable. Its scope includes local analysis, inference, hypothesis testing, and synthesis; the answer need not be known in advance. Difficulty, volume, task vocabulary, or the presence of reasoning does not alone justify moving it to Astra.
+Luna/max owns a bounded RE investigation: a concrete question, component, or batch with identified inputs and an evidence-based deliverable. Its scope includes local analysis, inference, hypothesis testing, and synthesis; the answer need not be known in advance. Difficulty, volume, task vocabulary, or the presence of reasoning does not alone justify moving it to Sol.
 
 Examples include tracing behavior and dependencies; identifying symbols, wrappers, or library patterns; inferring types, layouts, calling conventions, formats, or protocols; comparing versions; and annotating disassembly or applying authorized renames and edits.
 
-Use Astra/low for broader RE decomposition and planning, cross-investigation synthesis, reviews, audits, product or architectural decisions, and ambiguity beyond the assigned investigation. Do not relabel ordinary tracing or evidence checking as review to bypass Luna. Escalate only the unresolved question with evidence and competing interpretations; keep the remaining bounded work with Luna. Mark inferred names/types as tentative and distinguish observations from hypotheses.
+Use Sol/xhigh for broader RE decomposition and planning, cross-investigation synthesis, reviews, audits, product or architectural decisions, and ambiguity beyond the assigned investigation. Do not relabel ordinary tracing or evidence checking as review to bypass Luna. Escalate only the unresolved question with evidence and competing interpretations; keep the remaining bounded work with Luna. Mark inferred names/types as tentative and distinguish observations from hypotheses.
 
-All directly RE-related work that would otherwise route to Astra/medium uses Astra/low, including escalations and nested delegation. Outside RE, Luna must escalate judgment beyond its assigned execution scope to Astra/medium; Astra/low must route analysis, review, audits, planning, and new decisions to Astra/medium. Luna's max effort means thorough coverage, not permission to guess requirements.
+All directly RE-related work that would otherwise route to Astra/medium uses Sol/xhigh, including escalations and nested delegation. Outside RE, Luna must escalate judgment beyond its assigned execution scope to Astra/medium; Sol/xhigh must route analysis, review, audits, planning, and new decisions to Astra/medium. Luna's max effort means thorough coverage, not permission to guess requirements.
 
 ## Patient supervision and check-ins
 
