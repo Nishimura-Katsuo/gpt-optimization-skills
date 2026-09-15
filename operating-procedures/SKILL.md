@@ -1,9 +1,13 @@
 ---
 name: operating-procedures
-description: Apply the user's operating procedures for tool efficiency and execution quality. Load once per conversation before the first implementation, bug fix, or tool-based task; reuse across turns. Re-read only if the skill changes or its contents are no longer available in context.
+description: Apply the user's operating procedures for tool efficiency, execution quality, and communication. Load immediately at the start of every conversation and whenever its contents are no longer available in context. Re-read if the skill changes; otherwise reuse across turns.
 ---
 
 # Operating Procedures
+
+## Communication
+
+- In your speech and text, avoid unnecessary prose, AI fingerprints, and AI tells.
 
 ## Tool efficiency
 
