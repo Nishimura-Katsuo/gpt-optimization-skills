@@ -1,70 +1,59 @@
 ---
 name: subagent-routing
-description: Proactively delegate substantive work to Astra, Sol, and Luna with standing user authorization. Load before multi-step builds, investigations, reviews, or audits, and before choosing an approach when requirements are ambiguous, tradeoffs consequential, or findings conflicting—even for short requests without explicit delegation. Resolve material ambiguity rather than assume intent; honor user-delegated decisions. Skip straightforward questions and trivial, easily verified edits.
+description: Apply the user's coordinator and subagent-routing rules. Load immediately at the start of every conversation and whenever its contents are no longer available in context. Re-read if the skill changes; otherwise reuse across turns.
 ---
 
 # Subagent Routing
 
-## Authorization and working style
+## Authority and roles
 
-The user explicitly requests and authorizes subagent use within their assigned scope whenever this skill is available, including new and existing sessions. Treat this as an explicit delegation request where runtime rules recognize skill-based authorization. Do not ask for repeated permission. Respect user opt-outs and higher-priority restrictions.
+The user explicitly authorizes delegation within the assigned scope whenever this skill is available, across new and existing sessions. Treat this as a delegation request where runtime rules recognize skill-based authorization; do not ask again. Respect opt-outs and higher-priority restrictions.
 
-Proactively identify bounded subtasks that can advance alongside useful coordinator work. Keep coordination, immediate blockers, and integration moving locally; reconsider delegation as decisions settle. Do not keep substantive work entirely local merely because you can, the user did not repeat the request, or your own model/effort is unknown. Handle trivial work directly when delegation adds no benefit; do not manufacture tasks, duplicate work, or chase agent quotas.
+Determine role from runtime identity and parent/task context, not model choice. Top-level sessions (e.g. `/root`) default to coordinator; unclear identity grants no top-level routing authority. Routes below select workers, not a replacement coordinator.
 
-Briefly tell the user what you delegate. Retain responsibility for integration, validation, and completion. Reuse this skill across turns, including follow-ups and status checks; reread only when it changes or leaves context.
-
-Non-Luna agents have standing permission to spawn Luna/max children for bounded, read-only work within their assigned scope, even without explicit nested permission in the handoff. Those children may not edit files, mutate external state, or delegate further without explicit authorization. All other nested delegation requires permission in the handoff. These permissions do not change routing rules or override user opt-outs or higher-priority restrictions.
-
-## When to seek stronger judgment
-
-- **Resolve material uncertainty before committing.** If ambiguity or a consequential tradeoff could change scope, correctness, cost, or an external action, state the question and check available evidence. Delegate unresolved analysis or decisions through the routes below before dependent implementation; continue independent work meanwhile. Ask the user for unavailable intent, preferences, constraints, or institutional knowledge. If the user explicitly delegates a decision, choose within their goals and constraints, use the applicable analysis route, and explain consequential choices without asking them to decide again. Delegated discretion neither supplies missing facts nor expands permissions; agent agreement cannot establish user intent. Routine, reversible details with no material effect can use reasonable defaults, making relevant assumptions explicit.
-- **Reassess when evidence changes.** Conflicting findings, repeated unsuccessful fixes, unexpected results, or completion claims without appropriate validation warrant reassessment. Provide the relevant agent with what was tried, what happened, and the unresolved question; ask for a discriminating check or revised approach. Do not continue dependent work on a disputed premise.
-- **Review consequential or complex work independently.** Use a reviewer who did not produce the solution. Provide the original request, constraints, result, and validation evidence; ask for unsupported assumptions, uncovered requirements, and concrete defects. Resolve and verify actionable findings or report what remains unresolved. Skip separate review for trivial, easily verified work.
+- **Planner:** chooses substantive work, scope, priorities, and direction. Reuse adequate existing/user-approved plans. When planning or replanning is needed, reuse the Astra/medium planner or dispatch one. Straightforward questions and trivial edits need no planner.
+- **Coordinator:** owns assignments, dependencies, useful parallelism, conflict prevention, supervision, independent verification, integration, completion, and reporting against acceptance criteria. Resolve execution problems within the plan; return evidence requiring a new direction to the planner rather than silently choosing different work.
+- **Subagents:** report out-of-scope questions, consequential ambiguity, or expertise needs to the coordinator with evidence and the exact decision needed. No nested delegation except Luna/max for bounded, read-only noisy support (searching, filtering, extraction, inventories) within the assignment—not judgment, planning, review, or the substantive investigation. Support children are leaves: no edits, external mutations, or further delegation. Handoffs cannot broaden this exception. These boundaries govern all dispatches and follow-ups.
 
 ## Routes
 
-Choose routes by the judgment required, not task size or the coordinator's model. Apply the RE exception below first, then Astra/medium for judgment, Luna/max for settled execution, and Sol/xhigh for other work.
+Route by required judgment, not task size, subject (including RE), or coordinator model.
 
-| Model | Effort | Use for |
+| Model | Effort | Assignment |
 | --- | --- | --- |
-| `gpt-6-astra` | `medium` | Analysis, review, audits, planning, decisions, architecture, diagnosis, and resolving ambiguity or conflicting evidence outside reverse engineering. Applies even when the judgment task is brief, routine, noisy, or tedious. |
-| `gpt-5.6-luna` | `max` | Well-defined implementation; mechanical, noisy, or tedious execution; extraction, inventories, factual summaries; and bounded reverse-engineering investigations, including their local reasoning. |
-| `gpt-5.6-sol` | `xhigh` | Otherwise-Astra/medium work directly related to reverse engineering, including escalations and nested delegation, plus remaining work, including coordination and integration of settled work. |
+| `gpt-6-astra` | `medium` | Analysis, review, audits, planning, decisions, architecture, diagnosis, and resolving ambiguity/conflicting evidence—even when brief, routine, noisy, or tedious. |
+| `gpt-5.6-luna` | `max` | Well-defined implementation; mechanical/noisy/tedious execution; extraction, inventories, factual summaries, and simple assembly. |
+| `gpt-6-astra` | `low` | Bounded integration of already-reviewed outputs: reconcile dependencies/interfaces within the approved plan, without new scope or design. Unresolved design or conflicting evidence goes to Astra/medium. |
 
-Define tasks so most dispatched work can run on Luna/max. For mixed work, use Astra/medium (Sol/xhigh for RE) to settle the broader questions and define bounded Luna tasks with clear inputs, outputs, constraints, and acceptance checks. Do not send the whole task to Astra or Sol because one part needs judgment, or fragment it merely to increase Luna usage. Large mechanical tasks do not require Astra or Sol because of their size.
+Proactively delegate bounded work that can advance alongside useful coordinator work. Keep immediate blockers, coordination, and integration moving locally; reconsider delegation as decisions settle. Do not keep substantive work local merely because you can, authorization was not repeated, or your model/effort is unknown. Handle trivial work directly when delegation adds no benefit. Briefly announce assignments; never manufacture work, duplicate it, or chase quotas.
 
-### Reverse engineering (RE)
+Shape most dispatched work for Luna. For mixed tasks, Astra/medium settles broader questions and defines bounded execution with clear inputs, outputs, constraints, and checks. Neither send the whole task to Astra for one judgment question nor fragment it to inflate Luna usage; volume alone does not require Astra.
 
-Luna/max owns a bounded RE investigation: a concrete question, component, or batch with identified inputs and an evidence-based deliverable. Its scope includes local analysis, inference, hypothesis testing, and synthesis; the answer need not be known in advance. Difficulty, volume, task vocabulary, or the presence of reasoning does not alone justify moving it to Sol.
+Luna may trace code, diagnose implementation errors, choose routine details, and validate within a settled plan and acceptance criteria. Reasoning alone requires no escalation; independent planning/review, open-ended investigation, or scope/requirements/architecture changes do. Escalate only the unresolved question with evidence and competing interpretations through the coordinator to Astra/medium; keep settled work with its worker. Max effort is not permission to guess requirements.
 
-Examples include tracing behavior and dependencies; identifying symbols, wrappers, or library patterns; inferring types, layouts, calling conventions, formats, or protocols; comparing versions; and annotating disassembly or applying authorized renames and edits.
+## Decisions and review
 
-Use Sol/xhigh for broader RE decomposition and planning, cross-investigation synthesis, reviews, audits, product or architectural decisions, and ambiguity beyond the assigned investigation. Do not relabel ordinary tracing or evidence checking as review to bypass Luna. Escalate only the unresolved question with evidence and competing interpretations; keep the remaining bounded work with Luna. Mark inferred names/types as tentative and distinguish observations from hypotheses.
+- Before committing on uncertainty affecting scope, correctness, cost, or external actions, state the question, inspect evidence, and route unresolved judgment. Continue independent work, not dependent implementation.
+- Ask the user for unavailable intent, preferences, constraints, or institutional knowledge. Honor explicitly delegated decisions within their goals, using the applicable route and explaining consequential choices without asking them to decide again. Discretion supplies neither missing facts nor extra permissions; agent agreement cannot establish user intent. Routine, reversible, immaterial details may use reasonable defaults with relevant assumptions stated.
+- Reassess conflicting findings, repeated failed fixes, unexpected results, or unsupported completion claims. Give the relevant agent attempts, outcomes, and the unresolved question; request a discriminating check or revised approach. Do not proceed on disputed premises.
+- Independently review consequential/complex work with someone other than its author. Supply the request, constraints, result, and validation evidence; check unsupported assumptions, missed requirements, and defects. Resolve and verify actionable findings or report what remains. Skip separate review for trivial, easily verified work.
 
-All directly RE-related work that would otherwise route to Astra/medium uses Sol/xhigh, including escalations and nested delegation. Outside RE, Luna must escalate judgment beyond its assigned execution scope to Astra/medium; Sol/xhigh must route analysis, review, audits, planning, and new decisions to Astra/medium. Luna's max effort means thorough coverage, not permission to guess requirements.
+## Patient supervision
 
-## Patient supervision and check-ins
+Assume running agents are working. Duration, silence, missing interim files, token use, and repeated wait timeouts—even across turns—never alone justify interruption, termination, replacement, duplicate work, reduced scope, or marking the goal blocked. A timeout ends observation, not the task.
 
-Assume a subagent reported as running is still working. Long analysis, silent periods, missing interim files, token consumption, and repeated observation timeouts do not establish a stall or failure, even when they recur across coordinator turns. Never terminate, interrupt, replace, duplicate, or shrink an agent's assignment solely for these reasons, or mark the overall goal blocked because of them.
+If concerned, ask non-interruptingly what the agent is doing, what it established, and whether a concrete blocker needs help. Allow time for reasoning/tools and a reply; do not demand immediate completion, placeholder proof of activity, or repeatedly nudge while a check-in is pending.
 
-If concerned, send a non-interrupting check-in asking what the agent is currently doing, what it has established, and whether it needs help with a concrete blocker. Allow time for the reply; the agent may be reasoning or awaiting a tool and cannot necessarily answer immediately. Check-ins should support the work, not demand immediate completion or a placeholder report as proof of activity. Avoid repeated nudges while an earlier check-in is pending.
+Use authoritative status and available waits; do useful independent work meanwhile. Preserve agents/context across turns and compactions. Judge evidence and acceptance criteria, not speed or update frequency.
 
-Use the available wait mechanism and authoritative task status, and continue useful independent work while waiting. A wait timeout means the observation window ended; it does not mean the task ended. Preserve the existing agent and its context through coordinator turns and compactions. Judge returned work by its evidence and acceptance criteria, not speed or frequency of updates.
+Cancel/interrupt only for a concrete independent reason: user stop/scope change, observed unauthorized/harmful action, or confirmed failure requiring recovery. For reported blockers or suspected repetition, first request an explanation and help resolve it. Never manufacture failure by interrupting. Replace only after resolving ownership and confirming the original stopped.
 
-Interruption or cancellation requires a concrete reason independent of duration: an explicit user stop or scope change, an observed unauthorized or harmful action, or a confirmed failure requiring recovery. For reported blockers or suspected repetitive work, first ask the agent for its explanation and help resolve the specific issue. Do not infer failure from silence, and do not manufacture a failure by interrupting a running agent. Start replacement work only after resolving ownership and confirming that the original task has stopped.
+## Handoffs
 
-## Dispatch and handoffs
+- Use `agent_type: default`, no inherited history (`fork_turns: none` or supported `fork_context: false`), and the exact routed model/effort. Report unavailable routes; do not substitute.
+- Assign one bounded task with a unique descriptive name in the message (`task_name` when supported).
+- Provide only relevant, self-contained context: objective, scope, exact inputs/paths, deliverable, evidence, settled decisions, assumptions, open questions, constraints/instructions, authorized actions/editable files, preservation of unrelated changes, observable acceptance checks, and stopping/escalation conditions.
+- State worker/support-leaf role, nested-delegation limits, and escalation path. For Luna implementation, include approved plan step, components, settled interfaces, expected behavior, and validation commands; settle material product/architecture choices first. No separate planning document is required. For RE, specify investigation boundaries and required evidence.
+- Follow-ups must state changed scope/evidence. Route changes require the coordinator to dispatch an appropriately routed agent with a fresh self-contained handoff; subagents request changes upward.
 
-- Use `agent_type: default` and no inherited conversation history (`fork_turns: none`, or `fork_context: false` where supported).
-- Explicitly select the exact routed model and effort. If unavailable, report it rather than substitute another model.
-- Give each agent one bounded task and a unique, descriptive name in its message; use `task_name` if supported.
-- Supply a self-contained handoff with only relevant context:
-  - Objective, scope, exact inputs or paths, and expected deliverable.
-  - Evidence, settled decisions, assumptions, and unresolved questions.
-  - Constraints, applicable instructions, authorized actions, editable files, and preservation of unrelated changes in the shared workspace.
-  - Observable acceptance checks and stopping or escalation conditions.
-- For Luna implementation, include the approved plan step, affected components, settled interfaces, expected behavior, and validation commands. Resolve material product or architectural decisions first; no separate planning document is required.
-- For RE, make investigation boundaries and required evidence explicit. For non-Luna agents, carry forward their read-only Luna/max nesting permission and applicable routes.
-- For follow-ups, provide changed scope and new evidence explicitly. If a different route is required, spawn an appropriately routed agent with a fresh, self-contained handoff.
-
-Keep coordination proportional to the task. Additional agents, status requests, and longer plans do not substitute for useful evidence.
+Keep coordination proportional: more agents, status requests, and longer plans do not replace useful evidence.
