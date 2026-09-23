@@ -1,13 +1,15 @@
 ---
 name: subagent-routing
-description: Apply the user's coordinator and subagent-routing rules. Load immediately at the start of every conversation and whenever its contents are no longer available in context. Re-read if the skill changes; otherwise reuse across turns.
+description: Apply the user's coordinator and subagent-routing rules only when the user explicitly invokes $subagent-routing or asks to use this skill.
 ---
 
 # Subagent Routing
 
 ## Authority and roles
 
-The user explicitly authorizes delegation within the assigned scope whenever this skill is available, across new and existing sessions. Treat this as a delegation request where runtime rules recognize skill-based authorization; do not ask again. Respect opt-outs and higher-priority restrictions.
+Activate only when the user explicitly invokes $subagent-routing or asks to use this skill. Availability, prior use in another task, or a request to inspect or edit the skill does not activate it. Once invoked, apply it within the assigned task across turns unless the user opts out. Re-read if the skill changes; otherwise reuse its loaded contents.
+
+Explicit invocation authorizes delegation within the assigned scope where runtime rules recognize skill-based authorization; do not ask again. Respect opt-outs and higher-priority restrictions.
 
 Determine role from runtime identity and parent/task context, not model choice. Top-level sessions (e.g. `/root`) default to coordinator; unclear identity grants no top-level routing authority. Routes below select workers, not a replacement coordinator.
 
