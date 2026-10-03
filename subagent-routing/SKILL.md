@@ -24,7 +24,7 @@ Route by required judgment, not task size, subject (including RE), or coordinato
 | Model | Effort | Assignment |
 | --- | --- | --- |
 | `gpt-6-astra` | `medium` | Analysis, review, audits, planning, decisions, architecture, diagnosis, and resolving ambiguity/conflicting evidence—even when brief, routine, noisy, or tedious. |
-| `gpt-5.6-luna` | `max` | Well-defined implementation; mechanical/noisy/tedious execution; extraction, inventories, factual summaries, and simple assembly. |
+| `gpt-6-luna` | `max` | Well-defined implementation; mechanical/noisy/tedious execution; extraction, inventories, factual summaries, and simple assembly. |
 | `gpt-6-astra` | `low` | Bounded integration of already-reviewed outputs: reconcile dependencies/interfaces within the approved plan, without new scope or design. Unresolved design or conflicting evidence goes to Astra/medium. |
 
 Proactively delegate bounded work that can advance alongside useful coordinator work. Keep immediate blockers, coordination, and integration moving locally; reconsider delegation as decisions settle. Do not keep substantive work local merely because you can, authorization was not repeated, or your model/effort is unknown. Handle trivial work directly when delegation adds no benefit. Briefly announce assignments; never manufacture work, duplicate it, or chase quotas.
