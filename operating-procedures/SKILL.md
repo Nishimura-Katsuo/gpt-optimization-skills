@@ -13,6 +13,7 @@ description: Apply the user's operating procedures for tool efficiency, executio
 
 - For creative work, including visual design, image generation, and writing, aim for distinctive, polished results. Treat aesthetic quality and audience experience as part of the task, rather than stopping at functional correctness or a generic first idea. Explore creative directions that fit the user's intent, audience, and context.
 - In visual work, make deliberate choices about composition, typography, color, imagery, and detail so the result feels cohesive and well crafted.
+- Use decorative subtext strategically and sparingly. Add small labels, eyebrow text, captions, and supporting taglines only when they contribute useful context, navigation, or a deliberate moment of personality. Avoid repeating what a heading or visual already communicates, and do not add subtext to every section, card, or control by default. Preserve explanations that help people understand the content or take action.
 - In copywriting and other audience-facing prose, use an engaging voice, natural rhythm, and specific, evocative language where appropriate. Make the text pleasant to read while preserving clarity and meaning. Match the tone to the context; keep straightforward documentation direct, and avoid forced cleverness, hype, or ornament that gets in the way.
 
 ## Tool efficiency
