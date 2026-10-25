@@ -4,9 +4,9 @@ Personal Codex skills for execution quality, subagent routing, and avoiding unne
 
 ## Operating procedures
 
-[`operating-procedures`](./operating-procedures/) applies shared guidance for clear communication, creative quality, efficient tool use, and reliable execution.
+[`operating-procedures`](./operating-procedures/) gives baseline guidance on understanding requests, execution quality, verification and reporting, safe actions, efficient tool use, communication, and creative quality. Explicit instructions from the user, system, or repository take precedence.
 
-It loads at the start of every conversation and whenever its contents are no longer available in context. It emphasizes inspecting evidence before making decisions, batching independent tool calls, resolving material uncertainty, and completing work in bounded slices with appropriate verification.
+It loads at the start of every conversation and whenever its contents are no longer available in context. Agents check results against every part of the request, inspect evidence and existing code before changing anything, and confirm that the APIs they rely on exist. They make the smallest complete fix at the root cause without weakening checks, change approach after repeated failures, and report what was and wasn't verified. They protect existing work and confirm before hard-to-reverse or external actions.
 
 ## Subagent routing
 
